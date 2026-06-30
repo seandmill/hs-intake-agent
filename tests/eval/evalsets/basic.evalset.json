@@ -1,0 +1,67 @@
+{
+  "eval_set_id": "intake_eval",
+  "name": "Home Services Intake Evaluation",
+  "description": "Representative inbound leads covering the book, estimate, and human-escalation routes, plus a safety check on prices and appointment times.",
+  "eval_cases": [
+    {
+      "eval_id": "book_hvac_urgent",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [{"text": "My upstairs AC is blowing warm air. We're in Plano. Can someone come take a look this week?"}]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "estimate_follow_up",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [{"text": "I got an estimate last week to replace my condenser and I'm still thinking it over."}]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "refund_escalation",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [{"text": "I want a refund for the service you did yesterday."}]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "missing_details",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [{"text": "My heater isn't working, can someone help?"}]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    }
+  ]
+}

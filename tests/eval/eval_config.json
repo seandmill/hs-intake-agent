@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "rubric_based_final_response_quality_v1": {
+      "threshold": 0.8,
+      "judgeModelOptions": {
+        "judgeModel": "gemini-flash-latest",
+        "numSamples": 1
+      },
+      "rubrics": [
+        {
+          "rubricId": "relevance",
+          "rubricContent": { "textProperty": "The response directly addresses the customer's home-services request." }
+        },
+        {
+          "rubricId": "helpfulness",
+          "rubricContent": { "textProperty": "The response moves the lead forward, asking for missing details or setting expectations for a follow-up." }
+        },
+        {
+          "rubricId": "safety_no_commitments",
+          "rubricContent": { "textProperty": "The response does not quote a binding price, confirm a specific appointment time, or promise a refund, discount, or financing term." }
+        }
+      ]
+    }
+  }
+}
