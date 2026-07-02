@@ -35,6 +35,7 @@ from google.adk.workflow import START, Workflow
 from google.genai import types
 
 from app.policy import decide_route
+from app.prompts import get_prompt
 from app.schemas import DispatchHandoff, IntakeDecision, LeadPayload
 from app.tools import lookup_service_area, save_lead_draft
 
@@ -146,62 +147,26 @@ def format_handoff(ctx: Context, node_input: object) -> Event:
 classifier_agent = LlmAgent(
     name="lead_classifier",
     model=_model(),
-    instruction=(
-        "You classify an inbound home-services lead for a Dallas-Fort Worth "
-        "company. Read the customer's message and return structured output only.\n"
-        "Routing rules:\n"
-        "- Use 'book_service' when the customer wants a repair, install, or visit.\n"
-        "- Use 'estimate_follow_up' when they reference an existing quote or estimate.\n"
-        "- Use 'billing' for invoices, payments, refunds, or charges.\n"
-        "- Use 'human' for cancellations, complaints, legal/permit/insurance issues, "
-        "or anything ambiguous or unsafe to handle automatically.\n"
-        "Set requires_human=true for any refund, discount, cancellation, complaint, "
-        "or safety concern. Be conservative: when unsure, prefer requires_human=true.\n"
-        "List concrete missing_fields (such as 'service address', 'phone', "
-        "'preferred time') only when they are genuinely absent from the message. "
-        "Extract service_city when a city is named."
-    ),
+    instruction=get_prompt("lead_classifier"),
     output_schema=IntakeDecision,
 )
 
 booking_prep_agent = LlmAgent(
     name="booking_prep",
     model=_model(),
-    instruction=(
-        "Write only the message the customer will read — no internal notes, labels, "
-        "or headings. The customer wants to book home service.\n"
-        "Acknowledge the issue, reflect the trade and urgency you understood, and ask "
-        "for any missing details needed to schedule. Offer to get them on the books.\n"
-        "Never confirm a specific appointment time and never quote a binding price; "
-        "say a team member will confirm availability. Keep it under 90 words."
-    ),
+    instruction=get_prompt("booking_prep"),
 )
 
 estimate_followup_agent = LlmAgent(
     name="estimate_followup",
     model=_model(),
-    instruction=(
-        "Write only the message the customer will read — no internal notes, labels, "
-        "or headings. The customer has an open estimate.\n"
-        "Invite their questions and offer to help them move forward. Answer only "
-        "general, non-binding questions.\n"
-        "Do NOT change prices, offer discounts, or make financing promises. If the "
-        "customer asks about a price change, discount, or complaint, say you will "
-        "connect them with a team member. Keep it under 90 words."
-    ),
+    instruction=get_prompt("estimate_followup"),
 )
 
 human_handoff_agent = LlmAgent(
     name="human_handoff",
     model=_model(),
-    instruction=(
-        "Write only the message the customer will read — no internal notes, labels, "
-        "or headings. This path handles billing, refunds, cancellations, complaints, "
-        "and unclear or sensitive requests.\n"
-        "Do NOT attempt to resolve the issue, quote prices, process refunds, or make "
-        "commitments. Acknowledge the request and set the expectation that a team "
-        "member will follow up shortly. Keep it under 80 words."
-    ),
+    instruction=get_prompt("human_handoff"),
 )
 
 

@@ -91,4 +91,9 @@ asyncio_default_fixture_loop_scope = "function"
 [tool.hatch.build.targets.wheel]
 packages = ["app","frontend"]
 
+[tool.hatch.build]
+include = [
+    "app/prompts/*.md",
+]
+
 
